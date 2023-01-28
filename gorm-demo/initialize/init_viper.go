@@ -21,7 +21,6 @@ func InitViper() *viper.Viper {
 	if config == "" {
 		if configEnv := os.Getenv(global.ConfigEnv); configEnv == "" { // 判断 全局变量里的 ConfigEnv 常量存储的环境变量是否为空
 			config = global.ConfigDefaultFile
-			// fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", gin.EnvGinMode, ConfigDefaultFile)
 			fmt.Printf("您正在使用gin模式的%s环境名称,config的路径为%s\n", global.ConfigEnv, global.ConfigDefaultFile)
 		} else {
 			config = configEnv

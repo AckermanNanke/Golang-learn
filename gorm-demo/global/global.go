@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -21,6 +22,7 @@ var (
 	SERVE_ADDR string
 	GVA_VP     *viper.Viper
 	GVA_CONFIG config.Server
+	GVA_LOG    *zap.Logger
 	MY_SQL     *gorm.DB
 	RW_LOCK    sync.RWMutex
 	LOCK       sync.Mutex

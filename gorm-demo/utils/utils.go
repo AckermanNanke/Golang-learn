@@ -8,7 +8,7 @@ import (
 // 判断存放日志文件夹是否重名或已存在
 func PathExists(path string) (bool, error) {
 	file, err := os.Stat(path)
-	if err != nil {
+	if err == nil {
 		if file.IsDir() {
 			return true, nil
 		}

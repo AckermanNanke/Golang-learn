@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	"gorm-demo/dao"
 	"gorm-demo/global"
+	"gorm-demo/model/freedb"
 	"os"
 
 	"gorm.io/driver/mysql"
@@ -11,7 +11,7 @@ import (
 
 // 初始化MYSQL表
 func RegisterTables(db *gorm.DB) {
-	err := db.AutoMigrate(&dao.FreeApi{}, &dao.User{})
+	err := db.AutoMigrate(&freedb.FreeUsers{})
 	if err != nil {
 		panic("初始化表失败")
 		os.Exit(0)

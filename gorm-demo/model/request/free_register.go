@@ -8,3 +8,7 @@ type FreeUserReq struct {
 	Phone    int    `json:"phone" gorm:"index;comment:用户手机号"`
 	Password string `json:"-" gorm:"comment:用户密码"`
 }
+
+type FreeUserRsp struct {
+	Status int `json:"status"`
+}

@@ -3,14 +3,15 @@ package dao
 import (
 	"errors"
 	"gorm-demo/global"
-	"gorm-demo/model/request"
+	"gorm-demo/model/freedb"
 )
 
-var user request.FreeUserReq
+type UserDao struct{}
 
 // 用户注册，判断数据库中是否已有数据，有则返回错误信息，没有则创建用户数据
-func Register(u *request.FreeUserReq) error {
-	err := global.MY_SQL.Where("phone_number = ? ", u.Phone).Find(&user).Error
+func (ud *UserDao) Register(u freedb.FreeUsers) error {
+	var user freedb.FreeUsers
+	err := global.MY_SQL.Where("phone = ? ", u.Phone).Find(&user).Error
 	if err != nil {
 		return errors.New("数据已存在")
 	}

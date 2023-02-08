@@ -1,0 +1,14 @@
+[free]2023/02/08 - 09:48:22.676	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:33	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 09:48:35.045	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:33	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 09:48:59.861	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:33	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 09:48:59.879	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:34	请求数据	{"PostForm": {"password":["000000"],"phone":["15500000001"],"username":["ac"]}}
+[free]2023/02/08 - 10:33:13.374	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:32	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 10:33:57.133	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:32	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 10:44:57.566	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:30	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 10:51:37.415	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:30	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 10:51:59.939	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:30	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 10:52:00.815	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:30	请求数据	{"PostForm": {}}
+[free]2023/02/08 - 10:53:47.931	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:30	请求数据	{"PostForm": {"password":["000000"],"phone":["17663910224"],"username":["ac"]}}
+[free]2023/02/08 - 10:53:49.632	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:30	请求数据	{"PostForm": {"password":["000000"],"phone":["17663910224"],"username":["ac"]}}
+[free]2023/02/08 - 10:55:55.094	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:31	请求数据	{"PostForm": "POST"}
+[free]2023/02/08 - 10:55:55.112	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:32	请求数据	{"PostForm": {"password":["000000"],"phone":["17663910224"],"username":["ac"]}}

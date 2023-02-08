@@ -4,6 +4,8 @@ import (
 	"errors"
 	"gorm-demo/global"
 	"gorm-demo/model/freedb"
+
+	"github.com/google/uuid"
 )
 
 type UserDao struct{}
@@ -15,6 +17,10 @@ func (ud *UserDao) Register(u freedb.FreeUsers) error {
 	if err != nil {
 		return errors.New("数据已存在")
 	}
-	global.MY_SQL.Create(&u)
+	u.UUID = uuid.New()
+	err = global.MY_SQL.Create(&u).Error
+	if err != nil {
+		return errors.New("创建数据失败")
+	}
 	return err
 }

@@ -1,11 +1,14 @@
 package request
 
+import request "gorm-demo/model/request/common"
+
 type RegisterReq struct {
-	Username string `json:"userName" gorm:"index;comment:用户登录名"`
-	Phone    int    `json:"phone" gorm:"index;comment:用户手机号"`
-	Password string `json:"-" gorm:"comment:用户密码"`
+	UserName string `json:"userName" example:"用户登录名"`
+	Phone    int    `json:"phone" example:"用户手机号"`
+	Password string `json:"password" example:"用户密码"`
 }
 
 type FreeUserRsp struct {
-	Status int `json:"status"`
+	request.ReqCommon
+	AcToken string `json:"actoken" gorm:"comment:用户登陆凭证"`
 }

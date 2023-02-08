@@ -1,6 +1,7 @@
 package request
 
 type ReqCommon struct {
-	Actoken string `json:"actoken" example:"用户唯一ID"`
 	ApiID   string `json:"apiID" example:"api编号"`
+	Message string `json:"message" example:"返回信息"`
+	Status  int    `json:"status" example:"接口状态"`
 }

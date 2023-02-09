@@ -14,7 +14,7 @@ type UserDao struct{}
 func (ud *UserDao) Register(u freedb.FreeUsers) error {
 	var user freedb.FreeUsers
 	err := global.MY_SQL.Where("phone = ? ", u.Phone).Find(&user).Error
-	if err != nil {
+	if err == nil {
 		return errors.New("数据已存在")
 	}
 	u.UUID = uuid.New()

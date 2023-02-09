@@ -199,3 +199,4 @@
 [free]2023/02/08 - 21:30:24.280	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:38	请求数据	{"PostForm": {"userName":"ac","phone":15500000001,"password":"000000"}}
 [free]2023/02/08 - 21:31:27.785	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:36	请求数据	{"Header": {"Accept":["*/*"],"Accept-Encoding":["gzip, deflate, br"],"Authorization":["4654654sdf54sf6ew4fef"],"Connection":["keep-alive"],"Content-Length":["117"],"Content-Type":["application/json"],"User-Agent":["Apifox/1.0.0 (https://www.apifox.cn)"]}}
 [free]2023/02/08 - 21:31:27.801	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:37	请求数据	{"Method": "POST"}
+[free]2023/02/08 - 21:31:27.802	[34minfo[0m	F:/Go/godemo/gorm-demo/controller/register.go:38	请求数据	{"PostForm": {"userName":"ac","phone":15500000001,"password":"000000"}}

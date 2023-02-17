@@ -17,6 +17,11 @@ type UserApi struct{}
 func (u UserApi) Register(w http.ResponseWriter, r *http.Request) {
 	var req request.RegisterReq
 	var res *request.RegisterRsp
+	var rsp []byte
+
+	global.GVA_LOG.Info("请求数据", zap.Any("Header", r.Header))
+	global.GVA_LOG.Info("请求数据", zap.Any("Method", r.Method))
+	global.GVA_LOG.Info("请求数据", zap.Any("PostForm", req))
 
 	body, err := io.ReadAll(r.Body)
 	defer r.Body.Close()
@@ -45,10 +50,6 @@ func (u UserApi) Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	global.GVA_LOG.Info("请求数据", zap.Any("Header", r.Header))
-	global.GVA_LOG.Info("请求数据", zap.Any("Method", r.Method))
-	global.GVA_LOG.Info("请求数据", zap.Any("PostForm", req))
-
 	user := &freedb.FreeUsers{UserName: req.UserName, Phone: req.Phone, Password: req.Password}
 	err = dao.UserDaoApi.Register(*user)
 	if err != nil {
@@ -69,7 +70,7 @@ func (u UserApi) Register(w http.ResponseWriter, r *http.Request) {
 		},
 		"actoken",
 	}
-	rsp, err := json.Marshal(res)
+	rsp, err = json.Marshal(res)
 	if err != nil {
 		w.Write([]byte("error2222"))
 	}

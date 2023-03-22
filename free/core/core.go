@@ -5,20 +5,21 @@ import (
 	"sync"
 )
 
+// 处理数据组合
+type Context struct{}
+
 // 请求处理函数
 type HandlerFunc func(*Context)
 
 // 请求处理函数列表
 type HandlersChain []HandlerFunc
 
-// 处理数据组合
-type Context struct{}
-
 // 参数对象
 type Param struct {
 	Key   string
 	Value string
 }
+
 type Params []Param
 
 // 路由体对象

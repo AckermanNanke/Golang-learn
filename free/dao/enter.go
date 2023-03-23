@@ -1,5 +1,5 @@
 package dao
 
 var (
-	UserDaoApi = &UserDao{}
+	UserDaoSql = &UserDao{}
 )

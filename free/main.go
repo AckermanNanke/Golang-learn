@@ -3,6 +3,7 @@ package main
 import (
 	"gorm-demo/global"
 	"gorm-demo/initialize"
+	"gorm-demo/server"
 
 	"go.uber.org/zap"
 )
@@ -20,7 +21,5 @@ func main() {
 		defer mysql.Close()
 	}
 
-	global.SERVE_ADDR = ":8999"
-	myserve := initialize.InitServer(global.SERVE_ADDR)
-	myserve.ListenAndServe()
+	server.RunServer()
 }

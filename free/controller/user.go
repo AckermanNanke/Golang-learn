@@ -12,9 +12,9 @@ import (
 	"go.uber.org/zap"
 )
 
-type UserApi struct{}
+type User struct{}
 
-func (u UserApi) Register(w http.ResponseWriter, r *http.Request) {
+func (u User) Register(w http.ResponseWriter, r *http.Request) {
 	var req request.RegisterReq
 	var res *request.RegisterRsp
 	var rsp []byte
@@ -51,7 +51,7 @@ func (u UserApi) Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user := &freedb.FreeUsers{UserName: req.UserName, Phone: req.Phone, Password: req.Password}
-	err = dao.UserDaoApi.Register(*user)
+	err = dao.UserDaoSql.Register(*user)
 	if err != nil {
 		res = &request.RegisterRsp{
 			request.RspCommon{

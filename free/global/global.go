@@ -19,13 +19,12 @@ type GVA_MODEL struct {
 }
 
 var (
-	SERVE_ADDR string
-	GVA_VP     *viper.Viper
-	GVA_CONFIG config.Server
-	GVA_LOG    *zap.Logger
-	MY_SQL     *gorm.DB
-	RW_LOCK    sync.RWMutex
-	LOCK       sync.Mutex
+	GVA_CONFIG config.Server //配置信息
+	GVA_VP     *viper.Viper  //配置文件读取库
+	GVA_LOG    *zap.Logger   //日志库
+	MY_SQL     *gorm.DB      //数据库
+	RW_LOCK    sync.RWMutex  //读写锁
+	LOCK       sync.Mutex    //互斥锁
 )
 
 const (

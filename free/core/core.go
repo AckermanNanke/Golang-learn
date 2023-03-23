@@ -5,11 +5,8 @@ import (
 	"sync"
 )
 
-// 处理数据组合
-type Context struct{}
-
 // 请求处理函数
-type HandlerFunc func(*Context)
+type HandlerFunc func(http.ResponseWriter, *http.Request)
 
 // 请求处理函数列表
 type HandlersChain []HandlerFunc
@@ -24,25 +21,40 @@ type Params []Param
 
 // 路由体对象
 type Fhttp struct {
-	pool  sync.Pool   //使用连接池处理并发
-	trees methodTrees //路由树
+	Router map[string]HandlerFunc
+	pool   sync.Pool //使用连接池处理并发
+}
+
+// 实现ServerHttp接口
+// 从连接池内取出请求示例后再放回去
+func (f *Fhttp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	key := r.URL.Path
+	if h, ok := f.Router[key]; ok {
+		h(w, r)
+	} else {
+		panic("404 NOT FOUND: %s\n")
+	}
 }
 
 func New() *Fhttp {
 	f := &Fhttp{
-		trees: make(methodTrees, 0, 9),
-	}
-	f.pool.New = func() interface{} {
-		return nil
+		Router: make(map[string]HandlerFunc),
 	}
 	return f
 }
 
-// 从连接池内取出请求示例后再放回去
-func (f *Fhttp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	c := f.pool.Get().(*Context)
-	f.HttpRequestHandle(c)
-	f.pool.Put(c)
+// 添加路由
+func (f *Fhttp) addRoute(method string, pattern string, handler HandlerFunc) {
+	key := pattern
+	f.Router[key] = handler
 }
 
-func (f *Fhttp) HttpRequestHandle(c *Context) {}
+// 添加 GET 请求
+func (f *Fhttp) GET(pattern string, handler HandlerFunc) {
+	f.addRoute("GET", pattern, handler)
+}
+
+// 添加 POST 请求
+func (f *Fhttp) POST(pattern string, handler HandlerFunc) {
+	f.addRoute("POST", pattern, handler)
+}

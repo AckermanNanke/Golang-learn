@@ -1,19 +1,19 @@
 package core
 
-type nodeType uint8
-
+// 树节点
 type node struct {
-	path      string
-	indices   string
-	wildChild bool
-	nType     nodeType
-	priority  uint32
-	children  []*node // 子节点：数组末尾最多有1个param样式的节点
-	handlers  HandlersChain
-	fullPath  string
+	pattern  string  //待匹配路由
+	part     string  //路由中的一部分
+	children []*node // 子节点
+	isWild   bool    //是否精确匹配:part含有 : || true 时为空
 }
-type methodTree struct {
-	method string
-	root   *node
+
+// 匹配节点
+func (n *node) matchChild(part string) *node {
+	for _, child := range n.children {
+		if child.part == part || child.isWild {
+			return child
+		}
+	}
+	return nil
 }
-type methodTrees []methodTree

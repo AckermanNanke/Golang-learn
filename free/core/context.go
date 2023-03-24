@@ -6,6 +6,9 @@ import (
 	"net/http"
 )
 
+// 返回数据体
+type H map[string]interface{}
+
 type Context struct {
 	R          *http.Request
 	W          http.ResponseWriter
@@ -15,7 +18,8 @@ type Context struct {
 }
 
 // Context创建
-func (c *Context) New(w http.ResponseWriter, r *http.Request) *Context {
+// func (c *Context) New(w http.ResponseWriter, r *http.Request) *Context {
+func NewContext(w http.ResponseWriter, r *http.Request) *Context {
 	return &Context{
 		R:      r,
 		W:      w,
@@ -50,8 +54,11 @@ func (c *Context) JSON(code int, obj interface{}) {
 	c.SetHeader("Content-Type", "application/json")
 	c.Status(code)
 	encoder := json.NewEncoder(c.W)
+	// 如果err!=nil的话http.Error(c.Writer, err.Error(), 500)这里是不起作用的，因为前面已经执行了WriteHeader(code),那么返回码将不会再更改
+	// http.Error(c.Writer, err.Error(), 500)里面的w.WriteHeader(code)、w.Header().Set()不起作用
+	// 而且encoder.Encode(obj)相当于调用了Write()，http.Error(c.Writer, err.Error(), 500)里面的WriteHeader、Header().Set()操作都是无效的。
 	if err := encoder.Encode(obj); err != nil {
-		http.Error(c.W, err.Error(), 500)
+		panic(err)
 	}
 }
 

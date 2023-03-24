@@ -36,11 +36,22 @@ func New() *Fhttp {
 
 // 实现ServerHttp接口
 // 从连接池内取出请求示例后再放回去
-func (f *Fhttp) ServeHTTP(c *Context) {
-	key := c.Path
-	if h, ok := f.handlers[key]; ok {
-		h(c)
-	} else {
-		c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
-	}
+func (f *Fhttp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	c := NewContext(w, r)
+	f.Router.handle(c)
+}
+
+// 调用路由模块添加方法 - 添加路由
+func (f *Fhttp) AddRoute(method string, pattern string, handler HandlerFunc) {
+	f.Router.addRoute(method, pattern, handler)
+}
+
+// 添加 GET 请求
+func (f *Fhttp) GET(pattern string, handler HandlerFunc) {
+	f.Router.GET(pattern, handler)
+}
+
+// 添加 POST 请求
+func (f *Fhttp) POST(pattern string, handler HandlerFunc) {
+	f.Router.POST(pattern, handler)
 }

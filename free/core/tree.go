@@ -1,11 +1,13 @@
 package core
 
+import "strings"
+
 // 树节点
 type node struct {
 	pattern  string  //待匹配路由
 	part     string  //路由中的一部分
 	children []*node // 子节点
-	isWild   bool    //是否精确匹配:part含有 : || true 时为空
+	isWild   bool    //是否精确匹配	part含有 : 或 * 时为 true
 }
 
 // 第一个匹配节点	插入
@@ -30,19 +32,35 @@ func (n *node) matchChildren(part string) []*node {
 }
 
 // 插入节点
-// func (n *node) insert(pattern string, parts []string, height int) {
-// 	if len(parts) == height {
-// 		n.pattern = pattern
-// 		return
-// 	}
+func (n *node) insert(pattern string, parts []string, index int) {
+	if len(parts) == index {
+		n.pattern = pattern
+		return
+	}
 
-// 	part := parts[height]
-// 	child := n.matchChild(part)
-// 	if child == nil {
-// 		child := &node{part: part, isWild: part[0] == ':' || part[0] == '*'}
-// 		n.children = append(n.children, child)
-// 	}
-// }
+	part := parts[index]
+	child := n.matchChild(part)
+	if child == nil {
+		child := &node{part: part, isWild: part[0] == ':' || part[0] == '*'}
+		n.children = append(n.children, child)
+	}
+}
 
 // 搜索节点
-// func (n *node)
+func (n *node) search(parts []string, index int) *node {
+	if len(parts) == index || strings.HasPrefix(n.part, "*") {
+		if n.pattern == "" {
+			return nil
+		}
+		return n
+	}
+	part := parts[index]
+	children := n.matchChildren(part)
+	for _, child := range children {
+		result := child.search(parts, index+1)
+		if result != nil {
+			return result
+		}
+	}
+	return nil
+}

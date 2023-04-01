@@ -4,8 +4,8 @@ import "strings"
 
 // 树节点
 type node struct {
-	pattern  string  //待匹配路由
-	part     string  //路由中的一部分
+	pattern  string  //待匹配路由的全地址 例：/a/:b/c
+	part     string  //路由中的一部分 例：:b
 	children []*node // 子节点
 	isWild   bool    //是否精确匹配	part含有 : 或 * 时为 true
 }
@@ -44,6 +44,7 @@ func (n *node) insert(pattern string, parts []string, index int) {
 		child := &node{part: part, isWild: part[0] == ':' || part[0] == '*'}
 		n.children = append(n.children, child)
 	}
+	child.insert(pattern, parts, index+1)
 }
 
 // 搜索节点

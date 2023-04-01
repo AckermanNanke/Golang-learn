@@ -5,13 +5,13 @@ import (
 	"strings"
 )
 
-type Router struct {
+type Route struct {
 	roots    map[string]*node
 	handlers map[string]HandlerFunc
 }
 
-func newRouter() *Router {
-	return &Router{
+func newRouter() *Route {
+	return &Route{
 		roots:    make(map[string]*node),
 		handlers: make(map[string]HandlerFunc),
 	}
@@ -19,7 +19,7 @@ func newRouter() *Router {
 
 // 路由地址切割
 // part != "" 判断时不把最开始 / 符号前面的空内容添加进去
-func (r *Router) parsePattern(pattern string) []string {
+func (r *Route) parsePattern(pattern string) []string {
 	partsOld := strings.Split(pattern, "/")
 	partsNew := make([]string, 0)
 
@@ -36,7 +36,7 @@ func (r *Router) parsePattern(pattern string) []string {
 }
 
 // 添加路由 添加方法分类 ——》 插入树节点 ——》添加对应方法
-func (r *Router) addRoute(method string, pattern string, handler HandlerFunc) {
+func (r *Route) addRoute(method string, pattern string, handler HandlerFunc) {
 	parts := r.parsePattern(pattern)
 
 	key := pattern
@@ -48,18 +48,45 @@ func (r *Router) addRoute(method string, pattern string, handler HandlerFunc) {
 	r.handlers[key] = handler
 }
 
+// 获取路由
+func (r *Route) GetRoute(method string, path string) (*node, map[string]string) {
+	pathArr := r.parsePattern(path)
+	params := make(map[string]string)
+
+	root, ok := r.roots[method]
+	if !ok {
+		return nil, nil
+	}
+
+	n := root.search(pathArr, 0)
+	if n != nil {
+		parts := r.parsePattern(n.pattern)
+		for i, part := range parts {
+			if part[0] == ':' {
+				params[part[1:]] = pathArr[i]
+			}
+			if part[0] == '*' && len(part) > 0 {
+				params[part[1:]] = strings.Join(pathArr[i:], "/")
+				break
+			}
+		}
+		return n, params
+	}
+	return nil, nil
+}
+
 // 添加 GET 请求
-func (r *Router) GET(pattern string, handler HandlerFunc) {
+func (r *Route) GET(pattern string, handler HandlerFunc) {
 	r.addRoute("GET", pattern, handler)
 }
 
 // 添加 POST 请求
-func (r *Router) POST(pattern string, handler HandlerFunc) {
+func (r *Route) POST(pattern string, handler HandlerFunc) {
 	r.addRoute("POST", pattern, handler)
 }
 
 // 绑定 handser 请求
-func (r *Router) handle(c *Context) {
+func (r *Route) handle(c *Context) {
 	key := c.Path
 	if h, ok := r.handlers[key]; ok {
 		h(c)

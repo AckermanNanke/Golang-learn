@@ -21,13 +21,13 @@ type Params []Param
 
 // 路由体对象
 type Fhttp struct {
-	Router
+	Route
 	pool sync.Pool //使用连接池处理并发
 }
 
 func New() *Fhttp {
 	f := &Fhttp{
-		Router: Router{
+		Route: Route{
 			handlers: make(map[string]HandlerFunc),
 		},
 	}
@@ -38,20 +38,20 @@ func New() *Fhttp {
 // 从连接池内取出请求示例后再放回去
 func (f *Fhttp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := NewContext(w, r)
-	f.Router.handle(c)
+	f.Route.handle(c)
 }
 
 // 调用路由模块添加方法 - 添加路由
 func (f *Fhttp) AddRoute(method string, pattern string, handler HandlerFunc) {
-	f.Router.addRoute(method, pattern, handler)
+	f.Route.addRoute(method, pattern, handler)
 }
 
 // 添加 GET 请求
 func (f *Fhttp) GET(pattern string, handler HandlerFunc) {
-	f.Router.GET(pattern, handler)
+	f.Route.GET(pattern, handler)
 }
 
 // 添加 POST 请求
 func (f *Fhttp) POST(pattern string, handler HandlerFunc) {
-	f.Router.POST(pattern, handler)
+	f.Route.POST(pattern, handler)
 }

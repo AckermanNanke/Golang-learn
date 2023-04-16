@@ -7,7 +7,7 @@ import (
 )
 
 // 返回数据体
-type H map[string]interface{}
+type FJSON map[string]interface{}
 
 type Context struct {
 	R          *http.Request

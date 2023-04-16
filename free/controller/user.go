@@ -8,7 +8,7 @@ import (
 type User struct{}
 
 func (u User) Register(c *core.Context) {
-	c.JSON(http.StatusOK, core.H{
+	c.JSON(http.StatusOK, core.FJSON{
 		"username": c.PostForm("username"),
 		"password": c.PostForm("password"),
 	})

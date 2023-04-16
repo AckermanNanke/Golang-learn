@@ -21,15 +21,19 @@ type Params []Param
 
 // 路由体对象
 type Fhttp struct {
-	Route
-	pool sync.Pool //使用连接池处理并发
+	*RouterGroup                //相当于继承RouterGroup
+	Route        *Route         //路由树
+	Groups       []*RouterGroup //存放所有路由分组
+	Pool         sync.Pool      //使用连接池处理并发
 }
 
 func New() *Fhttp {
 	f := &Fhttp{
-		Route: Route{
-			handlers: make(map[string]HandlerFunc),
-		},
+		Route: newRouter(),
+	}
+	f.RouterGroup = &RouterGroup{f: f}
+	f.Groups = []*RouterGroup{
+		f.RouterGroup,
 	}
 	return f
 }

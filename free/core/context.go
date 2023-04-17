@@ -13,7 +13,8 @@ type Context struct {
 	R          *http.Request
 	W          http.ResponseWriter
 	Path       string
-	method     string
+	Method     string
+	Params     map[string]string
 	StatusCode int
 }
 
@@ -24,8 +25,14 @@ func NewContext(w http.ResponseWriter, r *http.Request) *Context {
 		R:      r,
 		W:      w,
 		Path:   r.URL.Path,
-		method: r.Method,
+		Method: r.Method,
 	}
+}
+
+// 获取访问参数
+func (c *Context) Param(key string) string {
+	value, _ := c.Params[key]
+	return value
 }
 
 // 获取 POST 请求的参数
@@ -54,9 +61,7 @@ func (c *Context) JSON(code int, obj interface{}) {
 	c.SetHeader("Content-Type", "application/json")
 	c.Status(code)
 	encoder := json.NewEncoder(c.W)
-	// 如果err!=nil的话http.Error(c.Writer, err.Error(), 500)这里是不起作用的，因为前面已经执行了WriteHeader(code),那么返回码将不会再更改
-	// http.Error(c.Writer, err.Error(), 500)里面的w.WriteHeader(code)、w.Header().Set()不起作用
-	// 而且encoder.Encode(obj)相当于调用了Write()，http.Error(c.Writer, err.Error(), 500)里面的WriteHeader、Header().Set()操作都是无效的。
+	// 回码一经赋值将不会再更改
 	if err := encoder.Encode(obj); err != nil {
 		panic(err)
 	}

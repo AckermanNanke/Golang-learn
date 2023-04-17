@@ -1,0 +1,1 @@
+[free]2023/04/17 - 22:22:43.360	[31merror[0m	F:/Go/godemo/free/server/server.go:19	listen tcp :8888: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.

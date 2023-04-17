@@ -11,14 +11,6 @@ type Route struct {
 	handlers map[string]HandlerFunc
 }
 
-// 路由分组
-type RouterGroup struct {
-	prefix      string        //路由前缀
-	middlewares []HandlerFunc //中间件方法数组
-	parent      *RouterGroup  // 父路由
-	f           *Fhttp
-}
-
 func newRouter() *Route {
 	return &Route{
 		roots:    make(map[string]*node),
@@ -26,24 +18,12 @@ func newRouter() *Route {
 	}
 }
 
-// 创建路由分组
-func (g *RouterGroup) Group(prefix string) *RouterGroup {
-	f := g.f
-	newGroup := &RouterGroup{
-		prefix: g.prefix + f.prefix,
-		parent: g,
-		f:      f,
-	}
-	f.Groups = append(f.Groups, newGroup)
-	return newGroup
-}
-
 // 路由地址切割
 // part != "" 判断时不把最开始 / 符号前面的空内容添加进去
 func (r *Route) parsePattern(pattern string) []string {
 	partsOld := strings.Split(pattern, "/")
-	partsNew := make([]string, 0)
 
+	partsNew := make([]string, 0)
 	for _, part := range partsOld {
 		if part != "" {
 			partsNew = append(partsNew, part)
@@ -60,17 +40,16 @@ func (r *Route) parsePattern(pattern string) []string {
 func (r *Route) addRoute(method string, pattern string, handler HandlerFunc) {
 	parts := r.parsePattern(pattern)
 
-	key := pattern
 	_, ok := r.roots[method]
 	if !ok {
 		r.roots[method] = &node{}
 	}
 	r.roots[method].insert(pattern, parts, 0)
-	r.handlers[key] = handler
+	r.handlers[pattern] = handler
 }
 
 // 获取路由
-func (r *Route) GetRoute(method string, path string) (*node, map[string]string) {
+func (r *Route) getRoute(method string, path string) (*node, map[string]string) {
 	pathArr := r.parsePattern(path)
 	params := make(map[string]string)
 
@@ -108,9 +87,10 @@ func (r *Route) POST(pattern string, handler HandlerFunc) {
 
 // 绑定 handser 请求
 func (r *Route) handle(c *Context) {
-	key := c.Path
-	if h, ok := r.handlers[key]; ok {
-		h(c)
+	n, params := r.getRoute(c.Method, c.Path)
+	if n != nil {
+		c.Params = params
+		r.handlers[n.pattern](c)
 	} else {
 		c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
 	}

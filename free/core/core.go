@@ -21,20 +21,20 @@ type Params []Param
 
 // 路由体对象
 type Fhttp struct {
-	// *RouterGroup                //相当于继承RouterGroup
-	Route *Route //路由树
-	// Groups       []*RouterGroup //存放所有路由分组
-	Pool sync.Pool //使用连接池处理并发
+	*RouterGroup                //相当于继承RouterGroup
+	router       *router        //路由树
+	groups       []*RouterGroup //存放所有路由分组
+	Pool         sync.Pool      //使用连接池处理并发
 }
 
 func New() *Fhttp {
 	f := &Fhttp{
-		Route: newRouter(),
+		router: newRouter(),
 	}
-	// f.RouterGroup = &RouterGroup{f: f}
-	// f.Groups = []*RouterGroup{
-	// 	f.RouterGroup,
-	// }
+	f.RouterGroup = &RouterGroup{f: f}
+	f.groups = []*RouterGroup{
+		f.RouterGroup,
+	}
 	return f
 }
 
@@ -42,20 +42,20 @@ func New() *Fhttp {
 // 从连接池内取出请求示例后再放回去
 func (f *Fhttp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	c := NewContext(w, r)
-	f.Route.handle(c)
+	f.router.handle(c)
 }
 
 // 调用路由模块添加方法 - 添加路由
 func (f *Fhttp) AddRoute(method string, pattern string, handler HandlerFunc) {
-	f.Route.addRoute(method, pattern, handler)
+	f.router.addRoute(method, pattern, handler)
 }
 
 // 添加 GET 请求
 func (f *Fhttp) GET(pattern string, handler HandlerFunc) {
-	f.Route.GET(pattern, handler)
+	f.router.GET(pattern, handler)
 }
 
 // 添加 POST 请求
 func (f *Fhttp) POST(pattern string, handler HandlerFunc) {
-	f.Route.POST(pattern, handler)
+	f.router.POST(pattern, handler)
 }

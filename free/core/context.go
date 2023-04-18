@@ -68,7 +68,7 @@ func (c *Context) JSON(code int, obj interface{}) {
 }
 
 // 设置返回体的 body 为HTML格式
-func (c *Context) HTML(code int, html []byte) {
+func (c *Context) HTML(code int, html string) {
 	c.SetHeader("Content-Type", "text/html")
 	c.Status(code)
 	c.W.Write([]byte(html))

@@ -6,13 +6,13 @@ import (
 )
 
 // 路由树
-type Route struct {
+type router struct {
 	roots    map[string]*node
 	handlers map[string]HandlerFunc
 }
 
-func newRouter() *Route {
-	return &Route{
+func newRouter() *router {
+	return &router{
 		roots:    make(map[string]*node),
 		handlers: make(map[string]HandlerFunc),
 	}
@@ -20,7 +20,7 @@ func newRouter() *Route {
 
 // 路由地址切割
 // part != "" 判断时不把最开始 / 符号前面的空内容添加进去
-func (r *Route) parsePattern(pattern string) []string {
+func (r *router) parsePattern(pattern string) []string {
 	partsOld := strings.Split(pattern, "/")
 
 	partsNew := make([]string, 0)
@@ -37,7 +37,7 @@ func (r *Route) parsePattern(pattern string) []string {
 }
 
 // 添加路由 添加方法分类 ——》 插入树节点 ——》添加对应方法
-func (r *Route) addRoute(method string, pattern string, handler HandlerFunc) {
+func (r *router) addRoute(method string, pattern string, handler HandlerFunc) {
 	parts := r.parsePattern(pattern)
 
 	_, ok := r.roots[method]
@@ -49,7 +49,7 @@ func (r *Route) addRoute(method string, pattern string, handler HandlerFunc) {
 }
 
 // 获取路由
-func (r *Route) getRoute(method string, path string) (*node, map[string]string) {
+func (r *router) getRoute(method string, path string) (*node, map[string]string) {
 	pathArr := r.parsePattern(path)
 	params := make(map[string]string)
 
@@ -76,17 +76,17 @@ func (r *Route) getRoute(method string, path string) (*node, map[string]string) 
 }
 
 // 添加 GET 请求
-func (r *Route) GET(pattern string, handler HandlerFunc) {
+func (r *router) GET(pattern string, handler HandlerFunc) {
 	r.addRoute("GET", pattern, handler)
 }
 
 // 添加 POST 请求
-func (r *Route) POST(pattern string, handler HandlerFunc) {
+func (r *router) POST(pattern string, handler HandlerFunc) {
 	r.addRoute("POST", pattern, handler)
 }
 
 // 绑定 handser 请求
-func (r *Route) handle(c *Context) {
+func (r *router) handle(c *Context) {
 	n, params := r.getRoute(c.Method, c.Path)
 	if n != nil {
 		c.Params = params

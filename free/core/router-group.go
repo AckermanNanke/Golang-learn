@@ -1,15 +1,9 @@
 package core
 
-import (
-	"gorm-demo/global"
-
-	"go.uber.org/zap"
-)
-
 // 路由分组
 type RouterGroup struct {
 	prefix      string        //路由前缀
-	middlewares []HandlerFunc //中间件方法数组
+	middlewares HandlersChain //中间件方法数组
 	f           *Fhttp
 }
 
@@ -21,14 +15,12 @@ func (g *RouterGroup) Group(prefix string) *RouterGroup {
 		f:      f,
 	}
 	f.groups = append(f.groups, newGroup)
-	global.GVA_LOG.Info("newGroup", zap.Any("newGroup", newGroup.prefix))
 	return newGroup
 }
 
 // 添加路由
 func (g *RouterGroup) addRoute(method string, prefix string, handle HandlerFunc) {
 	pattern := g.prefix + prefix
-	global.GVA_LOG.Info("pattern", zap.Any("pattern", g.prefix))
 	g.f.router.addRoute(method, pattern, handle)
 }
 
@@ -40,4 +32,9 @@ func (g *RouterGroup) GET(prefix string, handle HandlerFunc) {
 // 添加路由
 func (g *RouterGroup) POST(prefix string, handle HandlerFunc) {
 	g.addRoute("POST", prefix, handle)
+}
+
+// 添加中间件
+func (g *RouterGroup) Use(middleware ...HandlerFunc) {
+	g.middlewares = append(g.middlewares, middleware...)
 }

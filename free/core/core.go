@@ -2,6 +2,7 @@ package core
 
 import (
 	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -41,7 +42,14 @@ func New() *Fhttp {
 // 实现ServerHttp接口
 // 从连接池内取出请求示例后再放回去
 func (f *Fhttp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	var middlewares HandlersChain
+	for _, g := range f.groups {
+		if strings.HasPrefix(r.URL.Path, g.prefix) {
+			middlewares = append(middlewares, g.middlewares...)
+		}
+	}
 	c := NewContext(w, r)
+	c.handlers = middlewares
 	f.router.handle(c)
 }
 

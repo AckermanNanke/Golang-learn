@@ -16,16 +16,26 @@ type Context struct {
 	Method     string
 	Params     map[string]string
 	StatusCode int
+	handlers   HandlersChain
+	index      int
 }
 
 // Context创建
-// func (c *Context) New(w http.ResponseWriter, r *http.Request) *Context {
 func NewContext(w http.ResponseWriter, r *http.Request) *Context {
 	return &Context{
 		R:      r,
 		W:      w,
 		Path:   r.URL.Path,
 		Method: r.Method,
+		index:  -1,
+	}
+}
+
+// 执行当前顺序（index）中间件
+func (c *Context) Next() {
+	c.index++
+	for ; c.index < len(c.handlers); c.index++ {
+		c.handlers[c.index](c)
 	}
 }
 

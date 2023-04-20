@@ -1,5 +1,0 @@
-[free]2023/04/19 - 22:21:22.181	[34minfo[0m	F:/Go/godemo/free/core/router-group.go:24	newGroup	{"newGroup": "/v1"}
-[free]2023/04/19 - 22:21:22.188	[34minfo[0m	F:/Go/godemo/free/core/router-group.go:31	pattern	{"pattern": "/v1"}
-[free]2023/04/19 - 22:21:22.188	[34minfo[0m	F:/Go/godemo/free/core/router-group.go:31	pattern	{"pattern": "/v1"}
-[free]2023/04/19 - 22:50:11.122	[34minfo[0m	F:/Go/godemo/free/router/enter.go:14	请求日志	{"fhttpError": "json: unsupported type: func() (io.ReadCloser, error)"}
-[free]2023/04/19 - 22:51:05.375	[34minfo[0m	F:/Go/godemo/free/router/enter.go:14	请求日志	{"fhttpError": "json: unsupported type: func() (io.ReadCloser, error)"}

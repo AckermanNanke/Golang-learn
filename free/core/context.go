@@ -96,3 +96,16 @@ func (c *Context) String(code int, format string, values ...interface{}) {
 	c.Status(code)
 	c.W.Write([]byte(fmt.Sprintf(format, values)))
 }
+
+// 默认错误处理
+func (c *Context) DefaultError(code int) {
+	if code == 500 {
+		c.Error500("Internal Server Error")
+	}
+}
+
+// 默认错误处理
+func (c *Context) Error500(val string) {
+	c.W.WriteHeader(http.StatusInternalServerError)
+	c.String(500, val)
+}

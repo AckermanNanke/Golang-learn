@@ -39,6 +39,14 @@ func New() *Fhttp {
 	return f
 }
 
+// 默认模板
+// 使用日志打印功能与panic恢复功能
+func Default() *Fhttp {
+	f := New()
+	f.Use(logger(), recovery())
+	return f
+}
+
 // 实现ServerHttp接口
 // 从连接池内取出请求示例后再放回去
 func (f *Fhttp) ServeHTTP(w http.ResponseWriter, r *http.Request) {
